@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2E0071114A9C37FF20D9D3EE849BD40C201A8C2F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2E0071114A9C37FF20D9D3EE849BD40C201A8C2F" : 9223372036854775807,
+    "CE8BB7D0F28B4367C634B5F65C65043E75623778" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "CD35A0C4-C703-4DFF-A00A-7D43D001A1F3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2E0071114A9C37FF20D9D3EE849BD40C201A8C2F" : "PathFinding\/",
+    "CE8BB7D0F28B4367C634B5F65C65043E75623778" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PathFinding",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "PathFinding\/PathFinding.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/oosnail\/PathFinding.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2E0071114A9C37FF20D9D3EE849BD40C201A8C2F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/oosnail\/invation.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CE8BB7D0F28B4367C634B5F65C65043E75623778"
+    }
+  ]
+}

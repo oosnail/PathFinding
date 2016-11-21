@@ -31,6 +31,17 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
     OONodeViewStateChoose,//啥都是不
 };
 
+typedef NS_ENUM(NSUInteger,OOWallType ){
+    OOWallTypehorizontal,//啥都是不
+    OOWallTypeVertical,//啥都是不
+};
+
+typedef NS_ENUM(NSUInteger,OOWallState ){
+    OOWallStateNone,//啥都是不
+    OOWallStateChoose,//选中状态（还不是一堵墙）
+    OOWallStatetureWall,//是一堵墙
+};
+
 
 
 @interface OONode : UIView
@@ -123,14 +134,45 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
 @end
 
 
+@interface OOWall : UIView
+@property (nonatomic, assign) float x;
+@property (nonatomic, assign) float y;
+@property (nonatomic, assign) OOWallType wallType;
+@property (nonatomic, assign) OOWallState wallState;
+
+
+@end
+@implementation OOWall
+- (void)setWallState:(OOWallState)wallState{
+    _wallState = wallState;
+    switch (wallState) {
+        case OOWallStateNone:
+            self.backgroundColor = [UIColor clearColor];
+            break;
+        case OOWallStateChoose:
+            self.backgroundColor = [UIColor yellowColor];
+            break;
+        case OOWallStatetureWall:
+            self.backgroundColor = [UIColor purpleColor];
+            break;
+        default:
+            self.backgroundColor = [UIColor clearColor];
+            break;
+    }
+}
+@end
+
 
 
 #define MaxX  10
 #define MaxY  10
 #define lineWidth  5.f
+#define _width  ((kScreenWidth - lineWidth)/MaxX -lineWidth)
+#define _height ((kScreenWidth - lineWidth)/MaxY -lineWidth)
 
 
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
 @interface ViewController ()
 //起始点
@@ -144,6 +186,8 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
 //所有的节点
 @property (nonatomic,strong) NSMutableArray<OONode*>* allNodeArray;
 
+//墙的地址
+@property (nonatomic,strong) NSDictionary* wallViewDic;
 //墙的地址
 @property (nonatomic,strong) NSMutableArray<NSArray*>* wallArray;
 //是否已经找到终点
@@ -164,7 +208,11 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
 @property (nonatomic,strong)OONode *endNodeView;
 //选择的点
 @property (nonatomic,strong)OONode *chooseNodeView;
+//choosewall
+@property (nonatomic,strong) OOWall *chooseWall;
 
+//截图
+@property(nonatomic,strong) UIView * snapshot;
 
 
 @end
@@ -187,7 +235,13 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
     _neighborArray = [NSMutableArray array];
     
     _allNodeArray = [NSMutableArray array];
+    
     _wallArray = [NSMutableArray array];
+    
+    NSMutableArray *horizontal = [NSMutableArray array];
+    NSMutableArray *vertical = [NSMutableArray array];
+    _wallViewDic = @{@"horizontal" : horizontal,@"vertical":vertical};
+
     
     
     _endPoint = @[@0,@9];
@@ -226,8 +280,7 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
     chessboard.center = self.view.center;
     [self.view addSubview:chessboard];
     
-    float _width = (kScreenWidth - lineWidth)/MaxX -lineWidth;
-    float _height =(kScreenWidth - lineWidth)/MaxY -lineWidth;
+
     for(int x =0;x<MaxX;x++){
         for(int y =0;y<MaxY;y++){
             OONode * nodeView = [[OONode alloc]init];
@@ -257,29 +310,155 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
                 [nodeView addGestureRecognizer:ges];
             }
             //设置wallView
-            /*
+            
              //TOP
              {
-             if(y < MaxY-1){
-             UIView* wallView = [[UIView alloc]init];
-             wallView.frame = CGRectMake((x+1)*(_width+lineWidth)-_width, kScreenWidth- (y+1)*(_height+lineWidth)-lineWidth, _width, lineWidth);
-             wallView.backgroundColor = [UIColor purpleColor];
-             [chessboard addSubview:wallView];
+                 if(y < MaxY-1){
+                 OOWall* wallView = [[OOWall alloc]init];
+                 wallView.frame = CGRectMake((x+1)*(_width+lineWidth)-_width, kScreenWidth- (y+1)*(_height+lineWidth)-lineWidth, _width, lineWidth);
+                wallView.wallState = OOWallStateNone;
+                //如果是墙
+                 if([_wallArray containsObject: @[@(nodeView.x),@(nodeView.y+0.5)]]){
+                     wallView.wallState = OOWallStatetureWall;
+                 }
+                wallView.wallType = OOWallTypehorizontal;
+                 wallView.x =nodeView.x;
+                 wallView.y =nodeView.y+ 0.5;
+                 [chessboard addSubview:wallView];
+                [_wallViewDic[@"horizontal"] addObject:wallView];
              }
              }
              //right
-             {
-             if(x < MaxX-1){
-             UIView* wallView = [[UIView alloc]init];
-             wallView.frame = CGRectMake((x+1)*(_width+lineWidth),kScreenWidth- (y+1)*(_height+lineWidth), lineWidth,_width);
-             wallView.backgroundColor = [UIColor purpleColor];
-             [chessboard addSubview:wallView];
+                 {
+                 if(x < MaxX-1){
+                 OOWall* wallView = [[OOWall alloc]init];
+                 wallView.frame = CGRectMake((x+1)*(_width+lineWidth),kScreenWidth- (y+1)*(_height+lineWidth), lineWidth,_width);
+                     wallView.wallState = OOWallStateNone;
+                     //如果是墙
+                 if([_wallArray containsObject: @[@(nodeView.x+0.5),@(nodeView.y)]]){
+                     wallView.wallState = OOWallStatetureWall;
+                 }
+                wallView.wallType = OOWallTypeVertical;
+                wallView.x =nodeView.x+ 0.5;
+                wallView.y =nodeView.y;
+                 [chessboard addSubview:wallView];
+                 [_wallViewDic[@"vertical"] addObject:wallView];
              }
              
              }
-             */
+            
         }
     }
+    
+    
+    float scale = 1;
+    //添加选择墙的模块
+    UIView *horizontalWall = [[UIView alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(chessboard.frame)+30, _width*scale, lineWidth*scale)];
+    horizontalWall.backgroundColor = [UIColor purpleColor];
+    horizontalWall.tag = 1;
+    [self.view addSubview:horizontalWall];
+
+    UIView *verticalWall = [[UIView alloc]initWithFrame:CGRectMake(130,CGRectGetMaxY(chessboard.frame)+30, lineWidth*scale, _height*scale)];
+    verticalWall.backgroundColor = [UIColor purpleColor];
+    verticalWall.tag = 2;
+    [self.view addSubview:verticalWall];
+    
+    //长按手势
+    UILongPressGestureRecognizer* longPress=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+    longPress.minimumPressDuration = 0;
+    [horizontalWall addGestureRecognizer:longPress];
+    
+    UILongPressGestureRecognizer* longPress1=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+    longPress1.minimumPressDuration = 0;
+    [verticalWall addGestureRecognizer:longPress1];
+}
+
+-(void)longPress:(UILongPressGestureRecognizer *)longPress{
+    //按住的时候回调用一次，松开的时候还会再调用一次
+    UIView * invView = longPress.view;
+    CGPoint location = [longPress locationInView:self.view];
+
+    if(!_snapshot){
+        _snapshot = [self customSnapshoFromView:invView];
+        [invView.superview addSubview:_snapshot];
+        if(_snapshot.tag == 1){
+            _snapshot.bounds = CGRectMake(0, 0, _width, lineWidth);
+        }else{
+            _snapshot.bounds = CGRectMake(0, 0, lineWidth, _height);
+        }
+        _snapshot.center = location;
+    }
+    switch (longPress.state) {
+        case UIGestureRecognizerStatePossible: {
+//            [self setAllViewType:INVViewtatusNone];
+            break;
+        }
+        case UIGestureRecognizerStateBegan: {
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {
+            [self moviesnapshot:location];
+            break;
+        }
+        case UIGestureRecognizerStateEnded: {
+            [self endmoviesnapshot:location];
+            break;
+        }
+        case UIGestureRecognizerStateCancelled: {
+            [_snapshot removeFromSuperview];
+            _snapshot = nil;
+            break;
+        }
+        case UIGestureRecognizerStateFailed: {
+            [_snapshot removeFromSuperview];
+            _snapshot = nil;
+            break;
+        }
+    }
+}
+
+- (void)moviesnapshot:(CGPoint)loc{
+    float chessviewX = kScreenHeight/2.0 - kScreenWidth/2.0;
+    _snapshot.center = loc;
+    if(_snapshot.tag == 1){//横着
+        int x = round((loc.x - (lineWidth)/2 - _width/2)*MaxX/(kScreenWidth - lineWidth));
+        int y =MaxY-1 - round((loc.y- chessviewX - (lineWidth)/2)*MaxY/(kScreenWidth - lineWidth));
+        if(x>=0 && x< MaxX && y >= 0 && y < MaxY-1 ){
+            NSLog(@"horizontal：横着：%d 竖着：%d",x,y);
+            OOWall *view = _wallViewDic[@"horizontal"][x*(MaxY-1)+y];
+            if(view.wallState != OOWallStatetureWall){
+                _chooseWall.wallState = OOWallStateNone;
+                view.wallState = OOWallStateChoose;
+                _chooseWall = view;
+            }
+        }
+    }else{//竖着
+        int x = round((loc.x - (lineWidth)/2 )*MaxX/(kScreenWidth - lineWidth))-1;
+        int y =MaxY-1 - round((loc.y- chessviewX - (lineWidth)/2- _width/2)*MaxY/(kScreenWidth - lineWidth));
+        if(x>= 0 && x< MaxX-1 && y >= 0 && y < MaxY ){
+            NSLog(@"vertical：横着：%d 竖着：%d",x,y);
+            OOWall *view = _wallViewDic[@"vertical"][x*(MaxY)+y];
+            if(view.wallState != OOWallStatetureWall){
+                _chooseWall.wallState = OOWallStateNone;
+                view.wallState = OOWallStateChoose;
+                _chooseWall = view;
+            }
+        }
+    }
+}
+
+//移动结束
+- (void)endmoviesnapshot:(CGPoint)loc{
+    //获取loc的位置
+    //1是横 2是竖
+    if(_chooseWall){
+        _chooseWall.wallState = OOWallStatetureWall;
+        [_wallArray addObject:@[@(_chooseWall.x),@(_chooseWall.y)]];
+        _chooseWall = nil;
+    }
+    [_snapshot removeFromSuperview];
+    _snapshot = nil;
+    
 }
 
 
@@ -344,11 +523,13 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
     if(_neighborArray.count==0){
         _findendPoint = NO;
         [self endSearch];
+        return;
     }
     _nearestPoint = [self getNearestPointInNeighboar];
     if(_nearestPoint.distance == 0){
         _findendPoint = YES;
         [self endSearch];
+        return;
     }
 }
 
@@ -536,6 +717,25 @@ typedef NS_ENUM(NSUInteger,OONodeViewState ){
             _chooseNodeView = node;
         }
     }
+}
+
+//复制图片
+- (UIImageView *)customSnapshoFromView:(UIView *)inputView {
+    // 用cell的图层生成UIImage，方便一会显示
+    UIGraphicsBeginImageContextWithOptions(inputView.bounds.size, NO, 0);
+    [inputView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    // 自定义这个快照的样子（下面的一些参数可以自己随意设置）
+    UIImageView * snapview = [[UIImageView alloc] initWithImage:image];
+    snapview.layer.masksToBounds = NO;
+    snapview.layer.cornerRadius = 0.0;
+    snapview.layer.shadowOffset = CGSizeMake(-5.0, 0.0);
+    snapview.layer.shadowRadius = 5.0;
+    snapview.layer.shadowOpacity = 0.4;
+    snapview.alpha = 0.8;
+    snapview.tag = inputView.tag;
+    return snapview;
 }
 
 @end
