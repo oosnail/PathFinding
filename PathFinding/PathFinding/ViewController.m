@@ -202,6 +202,9 @@ typedef NS_ENUM(NSUInteger,OOWallState ){
 @property (nonatomic,strong)UIButton *starButton;
 //暂停按钮
 @property (nonatomic,strong)UIButton *pauseButton;
+//清除所有的墙
+@property (nonatomic,strong)UIButton *clearWallButton;
+
 //开始点
 @property (nonatomic,strong)OONode *startNodeView;
 //结束点
@@ -241,9 +244,6 @@ typedef NS_ENUM(NSUInteger,OOWallState ){
     NSMutableArray *horizontal = [NSMutableArray array];
     NSMutableArray *vertical = [NSMutableArray array];
     _wallViewDic = @{@"horizontal" : horizontal,@"vertical":vertical};
-
-    
-    
     _endPoint = @[@0,@9];
     //添加墙
     {
@@ -272,6 +272,13 @@ typedef NS_ENUM(NSUInteger,OOWallState ){
     [self.view addSubview:button2];
     [button2 addTarget:self action:@selector(button2Click:) forControlEvents:UIControlEventTouchUpInside];
     _pauseButton = button2;
+    
+    UIButton *button3 = [[UIButton alloc]initWithFrame:CGRectMake(250,70, 100, 40)];
+    [button3 setTitle:@"移除墙" forState:UIControlStateNormal];
+    button3.backgroundColor = [UIColor redColor];
+    [self.view addSubview:button3];
+    [button3 addTarget:self action:@selector(button3Click:) forControlEvents:UIControlEventTouchUpInside];
+    _clearWallButton = button3;
     
     
     UIView *chessboard = [[UIView alloc]init];
@@ -466,8 +473,10 @@ typedef NS_ENUM(NSUInteger,OOWallState ){
 - (void)button1Click:(UIButton*)button{
     if(!button.selected){
         _pauseButton.selected = NO;
+        _clearWallButton.enabled = NO;
         [self beginSearch];
     }else{
+        _clearWallButton.enabled = YES;
         [self endSearch];
         [self resetDodeStatus];
     }
@@ -483,6 +492,16 @@ typedef NS_ENUM(NSUInteger,OOWallState ){
     }
     
     button.selected = !button.selected;
+}
+
+- (void)button3Click:(UIButton*)button3Click{
+    for (OOWall *wall in self.wallViewDic[@"horizontal"]) {
+        wall.wallState = OOWallStateNone;
+    }
+    for (OOWall *wall in self.wallViewDic[@"vertical"]) {
+        wall.wallState = OOWallStateNone;
+    }
+    [_wallArray removeAllObjects];
 }
 
 //开始搜索
