@@ -14,6 +14,8 @@
 		035DDCAC1DE1DD9900F85F7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 035DDCAB1DE1DD9900F85F7C /* Assets.xcassets */; };
 		035DDCAF1DE1DD9900F85F7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 035DDCAD1DE1DD9900F85F7C /* LaunchScreen.storyboard */; };
 		035DDCB81DE1DDAF00F85F7C /* NSTimer+OOAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 035DDCB71DE1DDAF00F85F7C /* NSTimer+OOAddition.m */; };
+		1CF749611DE42EB600BCBB7F /* OONode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CF749601DE42EB600BCBB7F /* OONode.m */; };
+		1CF749641DE42F3900BCBB7F /* OOWall.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CF749631DE42F3900BCBB7F /* OOWall.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,10 @@
 		035DDCB01DE1DD9900F85F7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		035DDCB61DE1DDAF00F85F7C /* NSTimer+OOAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+OOAddition.h"; sourceTree = "<group>"; };
 		035DDCB71DE1DDAF00F85F7C /* NSTimer+OOAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+OOAddition.m"; sourceTree = "<group>"; };
+		1CF7495F1DE42EB600BCBB7F /* OONode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OONode.h; sourceTree = "<group>"; };
+		1CF749601DE42EB600BCBB7F /* OONode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OONode.m; sourceTree = "<group>"; };
+		1CF749621DE42F3900BCBB7F /* OOWall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OOWall.h; sourceTree = "<group>"; };
+		1CF749631DE42F3900BCBB7F /* OOWall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OOWall.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +78,10 @@
 				035DDCAD1DE1DD9900F85F7C /* LaunchScreen.storyboard */,
 				035DDCB01DE1DD9900F85F7C /* Info.plist */,
 				035DDC9F1DE1DD9900F85F7C /* Supporting Files */,
+				1CF7495F1DE42EB600BCBB7F /* OONode.h */,
+				1CF749601DE42EB600BCBB7F /* OONode.m */,
+				1CF749621DE42F3900BCBB7F /* OOWall.h */,
+				1CF749631DE42F3900BCBB7F /* OOWall.m */,
 			);
 			path = PathFinding;
 			sourceTree = "<group>";
@@ -159,6 +169,8 @@
 				035DDCA41DE1DD9900F85F7C /* AppDelegate.m in Sources */,
 				035DDCB81DE1DDAF00F85F7C /* NSTimer+OOAddition.m in Sources */,
 				035DDCA11DE1DD9900F85F7C /* main.m in Sources */,
+				1CF749611DE42EB600BCBB7F /* OONode.m in Sources */,
+				1CF749641DE42F3900BCBB7F /* OOWall.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +327,7 @@
 				035DDCB51DE1DD9900F85F7C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
